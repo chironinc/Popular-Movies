@@ -1,0 +1,19 @@
+<resources>
+<!-- Base application theme. -->
+<style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <item name="actionBarStyle">@style/ActionBar.Solid.Movies</item>
+</style>
+
+<style name="ForecastTheme" parent="AppTheme">
+    <item name="actionBarStyle">@style/ActionBar.Solid.Movies.NoTitle</item>
+</style>
+
+<style name="ActionBar.Solid.Movies" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <item name="background">@color/primary_dark</item>
+</style>
+
+<style name="ActionBar.Solid.Movies.NoTitle" parent="@style/ActionBar.Solid.Movies">
+    <item name="displayOptions">useLogo|showHome</item>
+</style>
+
+</resources>
