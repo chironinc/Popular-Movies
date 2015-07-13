@@ -41,24 +41,17 @@ public class PosterAdapter extends BaseAdapter {
     }
 
 
-
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView poster;
         if (convertView == null) {
-
-            if(convertView == null)
-            {
-                LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                poster = (ImageView) inflater.inflate(R.layout.movie_poster, parent, false);
-            }
-            else
-            {
-                poster = (ImageView) convertView;
-            }
-            Picasso.with(mContext).load(MainActivity.images.get(position)).into(poster);
+            LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            poster = (ImageView) inflater.inflate(R.layout.movie_poster, parent, false);
         } else {
             poster = (ImageView) convertView;
         }
+
+        Picasso.with(mContext).load(MainActivity.images.get(position)).into(poster);
+
         return poster;
     }
 

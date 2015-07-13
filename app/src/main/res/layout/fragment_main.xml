@@ -9,6 +9,5 @@ android:layout_height="match_parent">
     android:layout_height="match_parent"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"
-    android:stretchMode="columnWidth"
-    android:numColumns="2" />
+    android:stretchMode="columnWidth" />
 </FrameLayout>

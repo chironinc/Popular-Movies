@@ -1,8 +1,10 @@
 package com.carrero.josmary.popularmovies.Activities;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -32,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
     static public PosterAdapter posterAdapter;
     static GridView gridview;
     public static Toast toast;
+    public static ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,8 @@ public class MainActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             setHasOptionsMenu(true);
+            progress = ProgressDialog.show(rootView.getContext(), "Loading",
+                    "Please Wait...", true);
             initComponents(rootView);
             return rootView;
         }
@@ -83,6 +88,8 @@ public class MainActivity extends ActionBarActivity {
             moviesList = new ArrayList<Movie>();
             images = new ArrayList<String>();
             gridview = (GridView) view.findViewById(R.id.gridview);
+            int ot = getResources().getConfiguration().orientation;
+            gridview.setNumColumns(ot == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
             posterAdapter = new PosterAdapter(getActivity());
             gridview.setAdapter(posterAdapter);
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,6 +101,8 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(intent);
                 }
             });
+
+            toast = Toast.makeText(view.getContext(),"", Toast.LENGTH_SHORT);
         }
 
         public void updateMovies() {
@@ -128,7 +137,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         @Override
-        public void onResume() {
+        public void onStart() {
             Toast.makeText(getActivity(), "Getting Movies ...", Toast.LENGTH_SHORT).show();
             initComponents(getView());
             updateMovies();
