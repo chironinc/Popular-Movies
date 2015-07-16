@@ -49,14 +49,24 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String jsonString) {
-        super.onPostExecute(jsonString);
+    protected void onPostExecute(String response) {
+        if (response != null) {
+            loadInfo(response);
+        }
+
+    }
+
+
+
+    public  static void loadInfo (String jsonString) {
+        MainActivity.images.clear();
+        MainActivity.moviesList.clear();
+
         try {
             if (jsonString != null) {
                 JSONObject moviesObject = new JSONObject(jsonString);
                 JSONArray moviesArray = moviesObject.getJSONArray("results");
-                MainActivity.images.clear();
-                MainActivity.moviesList.clear();
+
 
                 for (int i = 0; i <= moviesArray.length(); i++) {
                     JSONObject movie = moviesArray.getJSONObject(i);
@@ -89,10 +99,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
                     MainActivity.posterAdapter.notifyDataSetChanged();
                 }
 
-            }else{
-                MainActivity.toast.setText("Something Wrong Happend");
-                MainActivity.toast.setDuration(Toast.LENGTH_SHORT);
-                MainActivity.toast.show();
             }
 
         } catch (JSONException e) {
@@ -146,7 +152,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
             }
         }
 
-        String y = moviesJson;
         return moviesJson;
     }
 
