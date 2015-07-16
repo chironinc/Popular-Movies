@@ -1,9 +1,12 @@
 package com.carrero.josmary.popularmovies.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Josmary on 7/11/15.
  */
-public class Movie {
+public class Movie implements Parcelable {
 
     int    id;
     String title;
@@ -23,6 +26,16 @@ public class Movie {
 
 
     public Movie() {
+    }
+    private Movie(Parcel parcel){
+        this.id = parcel.readInt();
+        this.title = parcel.readString();
+        this.original_title = parcel.readString();
+        this.backdrop_path = parcel.readString();
+        this.poster_path = parcel.readString();
+        this.overview = parcel.readString();
+        this.vote_average = parcel.readString();
+        this.release_date = parcel.readString();
     }
 
     public int getId() {
@@ -144,4 +157,34 @@ public class Movie {
     public void setRevenue(String revenue) {
         this.revenue = revenue;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.original_title);
+        dest.writeString(this.backdrop_path);
+        dest.writeString(this.poster_path);
+        dest.writeString(this.overview);
+        dest.writeString(this.vote_average);
+        dest.writeString(this.release_date);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[i];
+        }
+
+    };
 }

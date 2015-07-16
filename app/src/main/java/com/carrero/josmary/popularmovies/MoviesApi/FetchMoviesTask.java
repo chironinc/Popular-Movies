@@ -85,13 +85,11 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
                     } else {
                         MainActivity.images.add(API.IMAGE_URL + API.IMAGE_SIZE_185 + movie.getString("poster_path"));
                     }
-                    MainActivity.progress.dismiss();
                     MainActivity.moviesList.add(movieItem);
                     MainActivity.posterAdapter.notifyDataSetChanged();
                 }
 
             }else{
-                MainActivity.progress.dismiss();
                 MainActivity.toast.setText("Something Wrong Happend");
                 MainActivity.toast.setDuration(Toast.LENGTH_SHORT);
                 MainActivity.toast.show();
@@ -99,7 +97,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            MainActivity.progress.dismiss();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.carrero.josmary.popularmovies.Activities;
 
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -34,7 +33,6 @@ public class MainActivity extends ActionBarActivity {
     static public PosterAdapter posterAdapter;
     static GridView gridview;
     public static Toast toast;
-    public static ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,6 @@ public class MainActivity extends ActionBarActivity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,24 +70,16 @@ public class MainActivity extends ActionBarActivity {
         public MoviesFragment() {
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+                                 Bundle onSavedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             setHasOptionsMenu(true);
-            progress = ProgressDialog.show(rootView.getContext(), "Loading",
-                    "Please Wait...", true);
-            initComponents(rootView);
-            return rootView;
-        }
-
-        public void initComponents(View view) {
-            moviesList = new ArrayList<Movie>();
-            images = new ArrayList<String>();
-            gridview = (GridView) view.findViewById(R.id.gridview);
+            gridview = (GridView) rootView.findViewById(R.id.gridview);
             int ot = getResources().getConfiguration().orientation;
             gridview.setNumColumns(ot == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2);
-            posterAdapter = new PosterAdapter(getActivity());
             gridview.setAdapter(posterAdapter);
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
@@ -102,25 +91,16 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
 
-            toast = Toast.makeText(view.getContext(),"", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(rootView.getContext(),"", Toast.LENGTH_SHORT);
+            return rootView;
         }
 
-        public void updateMovies() {
-            SharedPreferences sharedPrefs =
-                    PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String sortingOrder = sharedPrefs.getString(
-                    getString(R.string.pref_sorting_order_key),
-                    getString(R.string.pref_sorting_order_default_value));
-
-            String sortingCriteria = sharedPrefs.getString(getString(R.string.pref_sorting_criteria_key), getString(R.string.pref_sorting_criteria_default_value));
-            new FetchMoviesTask().execute(sortingOrder, sortingCriteria, null);
-            gridview.setAdapter(posterAdapter);
-        }
 
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             inflater.inflate(R.menu.main_fragment, menu);
         }
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
@@ -136,12 +116,42 @@ public class MainActivity extends ActionBarActivity {
             return super.onOptionsItemSelected(item);
         }
 
+
         @Override
-        public void onStart() {
-            Toast.makeText(getActivity(), "Getting Movies ...", Toast.LENGTH_SHORT).show();
-            initComponents(getView());
-            updateMovies();
-            super.onResume();
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putParcelableArrayList("movies", MainActivity.moviesList);
+            outState.putStringArrayList("images", MainActivity.images);
+            super.onSaveInstanceState(outState);
         }
+
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            if(savedInstanceState != null && savedInstanceState.containsKey("movies")) {
+                moviesList = savedInstanceState.getParcelableArrayList("movies");
+                images = savedInstanceState.getStringArrayList("images");
+            }else{
+                moviesList = new ArrayList<Movie>();
+                images = new ArrayList<String>();
+                posterAdapter = new PosterAdapter(getActivity());
+                updateMovies();
+            }
+            super.onCreate(savedInstanceState);
+        }
+
+
+        public void updateMovies() {
+            SharedPreferences sharedPrefs =
+                    PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sortingOrder = sharedPrefs.getString(
+                    getString(R.string.pref_sorting_order_key),
+                    getString(R.string.pref_sorting_order_default_value));
+
+            String sortingCriteria = sharedPrefs.getString(getString(R.string.pref_sorting_criteria_key), getString(R.string.pref_sorting_criteria_default_value));
+            new FetchMoviesTask().execute(sortingOrder, sortingCriteria, null);
+        }
+
+
+
     }
 }
