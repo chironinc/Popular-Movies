@@ -52,6 +52,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String response) {
         if (response != null) {
             loadInfo(response);
+        } else {
+            MainActivity.toast.setText("No Internet Conection");
+            MainActivity.toast.setDuration(Toast.LENGTH_SHORT);
+            MainActivity.toast.show();
         }
 
     }
