@@ -28,7 +28,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, String> {
         if (params.length == 0) {
             return null;
         }
-        String sortingCriteria = params[1];
+        String sortingCriteria = params[0];
 
         Uri builtUri = Uri.parse(API.API_URL).buildUpon()
                 .appendQueryParameter("sort_by", sortingCriteria + ".desc")

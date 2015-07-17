@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
     static public ArrayList<Movie> moviesList;
     static public ArrayList<String> images;
     static public PosterAdapter posterAdapter;
+    static public String lastSortOrder;
     static GridView gridview;
     public static Toast toast;
 
@@ -140,15 +141,27 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
-        public void updateMovies() {
-            SharedPreferences sharedPrefs =
-                    PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String sortingOrder = sharedPrefs.getString(
-                    getString(R.string.pref_sorting_order_key),
-                    getString(R.string.pref_sorting_order_default_value));
-
+        @Override
+        public void onResume() {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String sortingCriteria = sharedPrefs.getString(getString(R.string.pref_sorting_criteria_key), getString(R.string.pref_sorting_criteria_default_value));
-            new FetchMoviesTask().execute(sortingOrder, sortingCriteria, null);
+
+            if(lastSortOrder!= null && !sortingCriteria.equals(lastSortOrder)){
+                moviesList = new ArrayList<Movie>();
+                images = new ArrayList<String>();
+                updateMovies();
+            }
+            lastSortOrder = sortingCriteria;
+            super.onResume();
+
+        }
+
+
+
+        public void updateMovies() {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sortingCriteria = sharedPrefs.getString(getString(R.string.pref_sorting_criteria_key), getString(R.string.pref_sorting_criteria_default_value));
+            new FetchMoviesTask().execute(sortingCriteria, null);
         }
 
 
