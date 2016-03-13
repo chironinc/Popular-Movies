@@ -35,6 +35,6 @@ You must provide your own API key in order to build the app.
 
 ## Screens
 
- ![Application screen](https://github.com/josmarycarrero/Portafolio-App/blob/master/screenshots/screen.png)
+ ![Application screen](https://github.com/josmarycarrero/Popular-Movies/blob/master/screenshots/screen.png)
 
 
